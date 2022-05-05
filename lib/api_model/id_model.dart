@@ -1,6 +1,6 @@
 import 'package:nft_market/api_model/token_meta_data_model.dart';
 
-class IdModel{
+class IdModel {
   String tokenId;
   TokenMetaDataModel tokenMetadata;
 

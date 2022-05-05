@@ -1,4 +1,4 @@
-class TokenMetaDataModel{
+class TokenMetaDataModel {
   String tokenType;
 
   TokenMetaDataModel({

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:nft_market/controllers/palette_generator_controller.dart';
 import 'package:nft_market/repository/http/top_nfts_info_http.dart';
-import 'top_nfts_item.dart';
+import 'package:provider/provider.dart';
 import '../api_model/owned_nfts_model.dart';
+import 'top_nfts_item.dart';
 
 class TopNfts extends StatefulWidget {
   const TopNfts({Key? key}) : super(key: key);
@@ -13,7 +15,7 @@ class TopNfts extends StatefulWidget {
 class _TopNftsState extends State<TopNfts> {
   final double? titleText = 25;
   final double? secondaryText = 12;
-  late List<OwnedNftsModel> apiNftInitialObject;
+  List<OwnedNftsModel>? apiNftInitialObject;
   final TopNftsInfoHttp topNftsInfoHttp = TopNftsInfoHttp();
   bool loading = true;
 
@@ -55,24 +57,29 @@ class _TopNftsState extends State<TopNfts> {
             ],
           ),
         ),
-        loading ? SizedBox(
-            width: 100,
-            height: 100,
-            child: CircularProgressIndicator()) :
-        Flexible(
-          child: SizedBox(
-              width: double.infinity,
-              height: 250,
-              child: ListView(
+        loading
+            ? const SizedBox(
+                width: 100, height: 100, child: CircularProgressIndicator())
+            : Flexible(
+                child: SizedBox(
+                    width: double.infinity,
+                    height: 250,
+                    child: ListView(
                       scrollDirection: Axis.horizontal,
                       children: [
-                        for (OwnedNftsModel item in apiNftInitialObject)
-                          TopNftsItem(
-                            nftModel: item,
+                        for (OwnedNftsModel item in apiNftInitialObject!)
+                          MultiProvider(
+                            providers: [
+                              ChangeNotifierProvider(
+                                  create: (_) => PaletteGeneratorController()),
+                            ],
+                            child: TopNftsItem(
+                              nftModel: item,
+                            ),
                           )
                       ],
                     )),
-        ),
+              ),
       ],
     );
   }

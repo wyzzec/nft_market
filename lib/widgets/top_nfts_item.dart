@@ -1,8 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:nft_market/controllers/palette_generator_controller.dart';
+import 'package:nft_market/controllers/url_transformer.dart';
+import 'package:provider/provider.dart';
 import '../api_model/owned_nfts_model.dart';
-import 'package:palette_generator/palette_generator.dart';
 import '../pages/nft_description_page.dart';
+
 class TopNftsItem extends StatefulWidget {
   const TopNftsItem({
     Key? key,
@@ -17,21 +21,24 @@ class TopNftsItem extends StatefulWidget {
 }
 
 class _TopNftsItemState extends State<TopNftsItem> {
-  late PaletteGenerator palette;
   bool loadingPaletteColor = true;
   bool httpUrlCheck = true;
-  late Image image;
   bool loadingImage = true;
+  UrlTransformer urlTransformer = UrlTransformer();
 
   @override
   void initState() {
-    urlTranformer();
-    initPaletteGenerator();
+    widget._nftModel.metadata.image =
+        urlTransformer.urlTranformer(widget._nftModel.metadata.image);
+    context
+        .read<PaletteGeneratorController>()
+        .generatePalette(widget._nftModel.metadata.image);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    final paletteController = context.watch<PaletteGeneratorController>();
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: SizedBox(
@@ -39,18 +46,20 @@ class _TopNftsItemState extends State<TopNftsItem> {
         child: GestureDetector(
           onTap: () {
             Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => NftDescriptionPage(
-                          ownedNftsModel: widget._nftModel,
-                          paletteGenerator: palette,
-                        )));
+              context,
+              MaterialPageRoute(
+                builder: (context) => NftDescriptionPage(
+                  ownedNftsModel: widget._nftModel,
+                  paletteGenerator: paletteController.palette,
+                ),
+              ),
+            );
           },
           child: Stack(
             children: [
               Positioned(
                 bottom: 0,
-                child: loadingPaletteColor
+                child: paletteController.state == PaletteState.loading
                     ? const Center(
                         child: CircularProgressIndicator(),
                       )
@@ -60,19 +69,18 @@ class _TopNftsItemState extends State<TopNftsItem> {
                             width: 190,
                             height: 170,
                             decoration: BoxDecoration(
-                                color: loadingPaletteColor
-                                    ? Colors.black
-                                    : palette.darkMutedColor!.color
-                                        .withOpacity(0.8),
-                                borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black87.withOpacity(0.5),
-                                spreadRadius: 2,
-                                blurRadius: 3,
-                                offset: const Offset(0, 3),
-                              )
-                            ],
+                              color: paletteController
+                                  .palette.darkMutedColor!.color
+                                  .withOpacity(0.8),
+                              borderRadius: BorderRadius.circular(20),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black87.withOpacity(0.5),
+                                  spreadRadius: 2,
+                                  blurRadius: 3,
+                                  offset: const Offset(0, 3),
+                                )
+                              ],
                             ),
                           ),
                           Positioned(
@@ -104,15 +112,6 @@ class _TopNftsItemState extends State<TopNftsItem> {
                                         size: 13,
                                       ),
                                       Spacer(),
-                                      // Text(
-                                      //   '123'
-                                      //           .toString() +
-                                      //       ' likes',
-                                      //   style: const TextStyle(
-                                      //     fontSize: 11,
-                                      //     color: Colors.white,
-                                      //   ),
-                                      // ),
                                     ],
                                   ),
                                 ),
@@ -125,7 +124,7 @@ class _TopNftsItemState extends State<TopNftsItem> {
                                       child: Text(
                                         widget._nftModel.title,
                                         style: TextStyle(
-                                            color: palette
+                                            color: paletteController.palette
                                                 .lightVibrantColor!.color),
                                       ),
                                     ),
@@ -155,7 +154,8 @@ class _TopNftsItemState extends State<TopNftsItem> {
                         ],
                         borderRadius: BorderRadius.circular(20),
                         image: DecorationImage(
-                          image: NetworkImage(widget._nftModel.metadata.image),
+                          image: CachedNetworkImageProvider(
+                              widget._nftModel.metadata.image),
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -204,35 +204,5 @@ class _TopNftsItemState extends State<TopNftsItem> {
         ),
       ),
     );
-  }
-
-  Future<void> _generatePalette(String imagePath) async {
-    PaletteGenerator paletteGenerator =
-        await PaletteGenerator.fromImageProvider(NetworkImage(imagePath),
-            maximumColorCount: 20);
-    palette = paletteGenerator;
-  }
-
-  void urlTranformer() {
-    if (widget._nftModel.metadata.image.contains('http')) {
-      httpUrlCheck = true;
-    } else {
-      if (widget._nftModel.metadata.image.contains('ipfs')) {
-        widget._nftModel.metadata.image = widget._nftModel.metadata.image
-            .replaceRange(0, 7, 'https://ipfs.io/ipfs/');
-        setState(() {
-          httpUrlCheck = true;
-        });
-      } else {
-        httpUrlCheck = false;
-      }
-    }
-  }
-
-  void initPaletteGenerator() async {
-    await _generatePalette(widget._nftModel.metadata.image);
-    setState(() {
-      loadingPaletteColor = false;
-    });
   }
 }

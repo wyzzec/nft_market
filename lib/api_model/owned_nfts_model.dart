@@ -1,21 +1,21 @@
 import 'package:nft_market/api_model/meta_data_model.dart';
+
 import 'id_model.dart';
 
 class OwnedNftsModel{
+  String title;
+  String description;
+  IdModel id;
+  MetaDataModel metadata;
 
- String title;
- String description;
- IdModel id;
- MetaDataModel metadata;
-
- OwnedNftsModel({
+  OwnedNftsModel({
     required this.title,
     required this.description,
     required this.id,
     required this.metadata,
   });
 
- Map<String, dynamic> toMap() {
+  Map<String, dynamic> toMap() {
     return {
       'title': title,
       'description': description,

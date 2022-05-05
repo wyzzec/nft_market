@@ -4,12 +4,15 @@ class LastTimesTopNftDropDownButton extends StatefulWidget {
   const LastTimesTopNftDropDownButton({Key? key}) : super(key: key);
 
   @override
-  State<LastTimesTopNftDropDownButton> createState() => _LastTimesTopNftDropDownButtonState();
+  State<LastTimesTopNftDropDownButton> createState() =>
+      _LastTimesTopNftDropDownButtonState();
 }
 
-class _LastTimesTopNftDropDownButtonState extends State<LastTimesTopNftDropDownButton> {
+class _LastTimesTopNftDropDownButtonState
+    extends State<LastTimesTopNftDropDownButton> {
   List<String> items = ['7 days', '30 days', '60 days', '120 days'];
   String? value = '7 days';
+
   @override
   Widget build(BuildContext context) {
     return DropdownButton<String>(

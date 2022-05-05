@@ -17,7 +17,7 @@ class MetaDataModel {
   factory MetaDataModel.fromMap(Map<String, dynamic> map) {
     return MetaDataModel(
       name: map['name'] as String,
-      image: map['image'] as String,
+      image: map['image'],
     );
   }
 }
