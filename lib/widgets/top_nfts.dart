@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:nft_market/controllers/httpController.dart';
 import 'package:nft_market/controllers/palette_generator_controller.dart';
-import 'package:nft_market/repository/http/top_nfts_info_http.dart';
+import 'package:nft_market/widgets/stroked_text_widget.dart';
 import 'package:provider/provider.dart';
-import '../api_model/owned_nfts_model.dart';
+
 import 'top_nfts_item.dart';
 
 class TopNfts extends StatefulWidget {
@@ -15,19 +16,16 @@ class TopNfts extends StatefulWidget {
 class _TopNftsState extends State<TopNfts> {
   final double? titleText = 25;
   final double? secondaryText = 12;
-  List<OwnedNftsModel>? apiNftInitialObject;
-  final TopNftsInfoHttp topNftsInfoHttp = TopNftsInfoHttp();
-  bool loading = true;
 
   @override
   void initState() {
-    waitRepositoryInfo();
-
+    context.read<HttpController>().waitHttpInfo();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    final httpController = context.watch<HttpController>();
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -36,60 +34,52 @@ class _TopNftsState extends State<TopNfts> {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                'Top NFTs',
-                style: TextStyle(
+              StrokedTextWidget(
+                  text: 'Top NFTs',
                   fontSize: titleText,
-                ),
-              ),
-              const Spacer(),
+                  internColor: Colors.grey,
+                  strokeColor: Colors.white30),
               const Spacer(),
               Container(
                 height: 30,
                 alignment: Alignment.bottomLeft,
-                child: Text(
-                  'View all',
-                  style: TextStyle(
+                child: StrokedTextWidget(
+                    text: 'View all',
                     fontSize: secondaryText,
-                  ),
-                ),
+                    internColor: Colors.grey,
+                    strokeColor: Colors.white30),
               ),
             ],
           ),
         ),
-        loading
-            ? const SizedBox(
-                width: 100, height: 100, child: CircularProgressIndicator())
-            : Flexible(
-                child: SizedBox(
-                    width: double.infinity,
-                    height: 250,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: [
-                        for (OwnedNftsModel item in apiNftInitialObject!)
-                          MultiProvider(
-                            providers: [
-                              ChangeNotifierProvider(
-                                  create: (_) => PaletteGeneratorController()),
-                            ],
-                            child: TopNftsItem(
-                              nftModel: item,
-                            ),
-                          )
-                      ],
-                    )),
-              ),
+        Flexible(
+          child: SizedBox(
+            width: double.infinity,
+            height: 250,
+            child: httpController.state == HttpState.loading
+                ? const SizedBox(
+                    width: 50,
+                    height: 50,
+                    child: CircularProgressIndicator(),
+                  )
+                : ListView.builder(
+                    itemCount: httpController.apiNftInitialObject!.length,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      return MultiProvider(
+                        providers: [
+                          ChangeNotifierProvider(
+                              create: (_) => PaletteGeneratorController()),
+                        ],
+                        child: TopNftsItem(
+                          nftModel: httpController.apiNftInitialObject![index],
+                        ),
+                      );
+                    },
+                  ),
+          ),
+        ),
       ],
     );
-  }
-
-  Future<void> waitRepositoryInfo() async {
-    await topNftsInfoHttp.findAllNfts().then((value) {
-      apiNftInitialObject = value;
-    });
-    setState(() {
-      loading = false;
-    });
   }
 }

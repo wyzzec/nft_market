@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:nft_market/controllers/palette_generator_controller.dart';
 import 'package:nft_market/controllers/url_transformer.dart';
 import 'package:provider/provider.dart';
+
 import '../api_model/owned_nfts_model.dart';
 import '../pages/nft_description_page.dart';
 
