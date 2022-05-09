@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nft_market/controllers/httpController.dart';
+import 'package:nft_market/controllers/http_owned_nft_controller.dart';
 import 'package:nft_market/controllers/palette_generator_controller.dart';
 import 'package:nft_market/widgets/stroked_text_widget.dart';
 import 'package:provider/provider.dart';
@@ -19,13 +19,13 @@ class _TopNftsState extends State<TopNfts> {
 
   @override
   void initState() {
-    context.read<HttpController>().waitHttpInfo();
+    context.read<HttpOwnedNftController>().waitHttpInfo();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final httpController = context.watch<HttpController>();
+    final httpController = context.watch<HttpOwnedNftController>();
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [

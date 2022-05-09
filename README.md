@@ -19,6 +19,8 @@ Aprendizados 1.2:
 - mudanças na aparencia com appbar e bottomNavigationBar.
 - criação de widgets personalizados para diminuir o acoplamento, diminuir quantidade de linhas e aumentar a reusabilidade (strokedTextWidget).
 
+Aprendizados 1.3:
+- uso de injeção de dependencia e inversão de dependencia no projeto, para diminuir o acoplamento.
 
 - fotos do app nos assets.
 - link da api: [API request](https://eth-mainnet.alchemyapi.io/v2/demo/getNFTs/?owner=0xfAE46f94Ee7B2Acb497CEcAFf6Cff17F621c693D)

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:nft_market/controllers/httpController.dart';
+import 'package:nft_market/controllers/http_owned_nft_controller.dart';
+import 'package:nft_market/repository/top_nfts_info_http.dart';
 import 'package:nft_market/widgets/stroked_text_widget.dart';
 import 'package:nft_market/widgets/top_nfts.dart';
 import 'package:provider/provider.dart';
@@ -105,7 +106,7 @@ class _HomePageState extends State<HomePage> {
               //   ),
               // ),
               MultiProvider(providers: [
-                ChangeNotifierProvider(create: (_) => HttpController()),
+                ChangeNotifierProvider(create: (_) => HttpOwnedNftController(topNftsInfoHttp: TopNftsInfoHttp())),
               ], child: const TopNfts()),
             ],
           ),
