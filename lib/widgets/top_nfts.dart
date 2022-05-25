@@ -52,33 +52,32 @@ class _TopNftsState extends State<TopNfts> {
             ],
           ),
         ),
-        Flexible(
-          child: SizedBox(
-            width: double.infinity,
-            height: 250,
-            child: httpController.state == HttpState.loading
-                ? const SizedBox(
-                    width: 50,
-                    height: 50,
-                    child: CircularProgressIndicator(),
-                  )
-                : ListView.builder(
-                    itemCount: httpController.apiNftInitialObject!.length,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) {
-                      return MultiProvider(
-                        providers: [
-                          ChangeNotifierProvider(
-                              create: (_) => PaletteGeneratorController()),
-                        ],
-                        child: TopNftsItem(
-                          nftModel: httpController.apiNftInitialObject![index],
-                        ),
-                      );
-                    },
-                  ),
-          ),
-        ),
+        httpController.state == HttpState.loading
+            ? const SizedBox(
+                width: 50,
+                height: 50,
+                child: CircularProgressIndicator(),
+              )
+            : SizedBox(
+              width: double.infinity,
+              height: 250,
+              child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: httpController.apiNftInitialObject!.length,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) {
+                    return MultiProvider(
+                      providers: [
+                        ChangeNotifierProvider(
+                            create: (_) => PaletteGeneratorController()),
+                      ],
+                      child: TopNftsItem(
+                        nftModel: httpController.apiNftInitialObject![index],
+                      ),
+                    );
+                  },
+                ),
+            ),
       ],
     );
   }

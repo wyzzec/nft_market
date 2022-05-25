@@ -1,5 +1,5 @@
 class TokenMetaDataModel {
-  String tokenType;
+  final String tokenType;
 
   TokenMetaDataModel({
     required this.tokenType,

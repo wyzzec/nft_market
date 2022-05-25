@@ -72,7 +72,7 @@ class _NftDescriptionPageState extends State<NftDescriptionPage> {
                   borderRadius: BorderRadius.circular(20),
                   image: DecorationImage(
                     image: CachedNetworkImageProvider(
-                      widget._ownedNftsModel.metadata.image,
+                      widget._ownedNftsModel.metadata.imageUrlFormatted!,
                     ),
                     fit: BoxFit.cover,
                   ),

@@ -3,10 +3,10 @@ import 'package:nft_market/api_model/meta_data_model.dart';
 import 'id_model.dart';
 
 class OwnedNftsModel{
-  String title;
-  String description;
-  IdModel id;
-  MetaDataModel metadata;
+  final String title;
+  final String description;
+  final IdModel id;
+  final MetaDataModel metadata;
 
   OwnedNftsModel({
     required this.title,

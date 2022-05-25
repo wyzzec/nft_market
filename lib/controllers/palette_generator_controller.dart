@@ -6,7 +6,7 @@ enum PaletteState { loading, loaded, error }
 
 class PaletteGeneratorController extends ChangeNotifier {
   PaletteState state = PaletteState.loading;
-  late PaletteGenerator palette;
+  PaletteGenerator? palette;
   Future<void> generatePalette(String imageUrl) async {
     try {
       palette = await PaletteGenerator.fromImageProvider(

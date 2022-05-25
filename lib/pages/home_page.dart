@@ -106,14 +106,14 @@ class _HomePageState extends State<HomePage> {
               //   ),
               // ),
               MultiProvider(providers: [
-                ChangeNotifierProvider(create: (_) => HttpOwnedNftController(topNftsInfoHttp: TopNftsInfoHttp())),
+                ChangeNotifierProvider(create: (_) => HttpOwnedNftController(interfaceTopNftsInfoHttp: TopNftsInfoHttp())),
               ], child: const TopNfts()),
             ],
           ),
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Color(0xfa0f227a).withOpacity(0.8),
+        backgroundColor: const Color(0xfa0f227a).withOpacity(0.8),
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
               icon: FaIcon(FontAwesomeIcons.house),

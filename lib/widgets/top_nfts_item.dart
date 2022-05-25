@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:nft_market/controllers/palette_generator_controller.dart';
-import 'package:nft_market/controllers/url_transformer.dart';
 import 'package:provider/provider.dart';
 
 import '../api_model/owned_nfts_model.dart';
@@ -25,15 +24,12 @@ class _TopNftsItemState extends State<TopNftsItem> {
   bool loadingPaletteColor = true;
   bool httpUrlCheck = true;
   bool loadingImage = true;
-  UrlTransformer urlTransformer = UrlTransformer();
 
   @override
   void initState() {
-    widget._nftModel.metadata.image =
-        urlTransformer.urlTranformer(widget._nftModel.metadata.image);
     context
         .read<PaletteGeneratorController>()
-        .generatePalette(widget._nftModel.metadata.image);
+        .generatePalette(widget._nftModel.metadata.imageUrlFormatted!);
     super.initState();
   }
 
@@ -51,7 +47,7 @@ class _TopNftsItemState extends State<TopNftsItem> {
               MaterialPageRoute(
                 builder: (context) => NftDescriptionPage(
                   ownedNftsModel: widget._nftModel,
-                  paletteGenerator: paletteController.palette,
+                  paletteGenerator: paletteController.palette!,
                 ),
               ),
             );
@@ -71,7 +67,7 @@ class _TopNftsItemState extends State<TopNftsItem> {
                             height: 170,
                             decoration: BoxDecoration(
                               color: paletteController
-                                  .palette.darkMutedColor!.color
+                                  .palette!.darkMutedColor!.color
                                   .withOpacity(0.8),
                               borderRadius: BorderRadius.circular(20),
                               boxShadow: [
@@ -125,7 +121,7 @@ class _TopNftsItemState extends State<TopNftsItem> {
                                       child: Text(
                                         widget._nftModel.title,
                                         style: TextStyle(
-                                            color: paletteController.palette
+                                            color: paletteController.palette!
                                                 .lightVibrantColor!.color),
                                       ),
                                     ),
@@ -156,7 +152,7 @@ class _TopNftsItemState extends State<TopNftsItem> {
                         borderRadius: BorderRadius.circular(20),
                         image: DecorationImage(
                           image: CachedNetworkImageProvider(
-                              widget._nftModel.metadata.image),
+                              widget._nftModel.metadata.imageUrlFormatted!),
                           fit: BoxFit.cover,
                         ),
                       ),
