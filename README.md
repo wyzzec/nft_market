@@ -22,5 +22,21 @@ Aprendizados 1.2:
 Aprendizados 1.3:
 - uso de injeção de dependencia e inversão de dependencia no projeto, para diminuir o acoplamento.
 
+Aprendizados 1.4
+- conceito de objetos imutáveis e padrão copywith
+- uso do getter para formatar a URL vinda da API sem quebrar o conceito de responsabilidade unica
+
+Aprendizados 1.5
+- Refatoração do código para mudar o scroll da lista
+- Teste de navegação de rotas pelo bottom navigation menu (ainda com setstate como gerencia de estado)
+- Aplicado conceito de loading com container cinza para melhor experiencia do usuário
+- A listview agora não destrói os seus filhos conforme somem na tela quando é feito o scroll.
+- A listview agora não perde seu estado quando é feita a navegação para outra tela.
+- Uso do dispose
+
+A ser feito:
+- Testes de unidade nas regras de negócio
+- implementação do BLoC
+
 - fotos do app nos assets.
 - link da api: [API request](https://eth-mainnet.alchemyapi.io/v2/demo/getNFTs/?owner=0xfAE46f94Ee7B2Acb497CEcAFf6Cff17F621c693D)

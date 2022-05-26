@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:nft_market/controllers/palette_generator_controller.dart';
+import 'package:nft_market/widgets/stroked_text_widget.dart';
 import 'package:provider/provider.dart';
 
 import '../api_model/owned_nfts_model.dart';
@@ -20,7 +21,8 @@ class TopNftsItem extends StatefulWidget {
   State<TopNftsItem> createState() => _TopNftsItemState();
 }
 
-class _TopNftsItemState extends State<TopNftsItem> {
+class _TopNftsItemState extends State<TopNftsItem>
+    with AutomaticKeepAliveClientMixin {
   bool loadingPaletteColor = true;
   bool httpUrlCheck = true;
   bool loadingImage = true;
@@ -34,42 +36,46 @@ class _TopNftsItemState extends State<TopNftsItem> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final paletteController = context.watch<PaletteGeneratorController>();
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: SizedBox(
-        width: 190,
-        child: GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => NftDescriptionPage(
-                  ownedNftsModel: widget._nftModel,
-                  paletteGenerator: paletteController.palette!,
+    return paletteController.state == PaletteState.loading
+        ? Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  width: 100,
+                  height: 100,
+                  color: Colors.grey,
                 ),
               ),
-            );
-          },
-          child: Stack(
+            ],
+          )
+        : Stack(
             children: [
-              Positioned(
-                bottom: 0,
-                child: paletteController.state == PaletteState.loading
-                    ? const Center(
-                        child: CircularProgressIndicator(),
-                      )
-                    : Stack(
+              Padding(
+                padding: const EdgeInsets.only(top: 4, left: 8),
+                child: SizedBox(
+                  width: 210,
+                  height: 280,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Stack(
+                        alignment: Alignment.center,
                         children: [
                           Container(
-                            width: 190,
-                            height: 170,
+                            width: 210,
+                            height: 210,
                             decoration: BoxDecoration(
                               color: paletteController
-                                  .palette!.darkMutedColor!.color
-                                  .withOpacity(0.8),
-                              borderRadius: BorderRadius.circular(20),
+                                  .palette!.darkMutedColor!.color,
+                              borderRadius: BorderRadius.circular(12),
                               boxShadow: [
                                 BoxShadow(
                                   color: Colors.black87.withOpacity(0.5),
@@ -81,125 +87,93 @@ class _TopNftsItemState extends State<TopNftsItem> {
                             ),
                           ),
                           Positioned(
-                            bottom: 2,
-                            left: 10,
-                            right: 10,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SizedBox(
-                                  width: 180,
-                                  height: 20,
-                                  child: Row(
-                                    children: const [
-                                      Text(
-                                        'test',
-                                        style: TextStyle(
-                                          fontSize: 11,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 4,
-                                      ),
-                                      FaIcon(
-                                        FontAwesomeIcons.solidCircleCheck,
-                                        color: Colors.indigo,
-                                        size: 13,
-                                      ),
-                                      Spacer(),
-                                    ],
+                              bottom: 10,
+                              child: Row(
+                                children: [
+                                  StrokedTextWidget(
+                                      text: widget._nftModel.title,
+                                      fontSize: 20,
+                                      internColor: paletteController
+                                          .palette!.lightMutedColor!.color,
+                                      strokeColor: Colors.black),
+                                  SizedBox(
+                                    width: 5,
                                   ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(bottom: 8),
-                                  child: SizedBox(
-                                    width: 150,
-                                    height: 20,
-                                    child: Center(
-                                      child: Text(
-                                        widget._nftModel.title,
-                                        style: TextStyle(
-                                            color: paletteController.palette!
-                                                .lightVibrantColor!.color),
-                                      ),
-                                    ),
+                                  FaIcon(
+                                    FontAwesomeIcons.ethereum,
+                                    color: Colors.blueAccent,
+                                    size: 18,
                                   ),
-                                ),
+                                ],
+                              ))
+                        ],
+                      ),
+                      Positioned(
+                          top: 0,
+                          child: Container(
+                            width: 190,
+                            height: 190,
+                            decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black87.withOpacity(0.5),
+                                  spreadRadius: 2,
+                                  blurRadius: 3,
+                                  offset: const Offset(0, 1),
+                                )
                               ],
+                              borderRadius: BorderRadius.circular(12),
+                              image: DecorationImage(
+                                image: CachedNetworkImageProvider(widget
+                                    ._nftModel.metadata.imageUrlFormatted!),
+                                fit: BoxFit.cover,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-              ),
-              Positioned(
-                left: 10,
-                child: Stack(
-                  children: [
-                    Container(
-                      width: 170,
-                      height: 170,
-                      decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black87.withOpacity(0.5),
-                            spreadRadius: 3,
-                            blurRadius: 5,
-                            offset: const Offset(0, 3),
-                          )
-                        ],
-                        borderRadius: BorderRadius.circular(20),
-                        image: DecorationImage(
-                          image: CachedNetworkImageProvider(
-                              widget._nftModel.metadata.imageUrlFormatted!),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      right: 4,
-                      bottom: 0,
-                      child: TextButton(
-                        onPressed: () {},
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            const FaIcon(
-                              FontAwesomeIcons.ethereum,
-                              color: Colors.blue,
-                              size: 12,
-                            ),
-                            const SizedBox(
-                              width: 5,
-                            ),
-                            Text(
-                              widget._nftModel.id.tokenMetadata.tokenType,
-                              style: const TextStyle(
-                                  fontSize: 12, color: Colors.blue),
-                            ),
-                            const SizedBox(
-                              width: 5,
-                            ),
-                            // Text('widget._nftModel.ownedNfts[0].id.tokenType'),
-                          ],
-                        ),
-                        style: TextButton.styleFrom(
-                          primary: Colors.black,
-                          backgroundColor: Colors.black12.withOpacity(0.7),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(24)),
-                        ),
-                      ),
-                    )
-                  ],
+                          ))
+                    ],
+                  ),
                 ),
               ),
+              Positioned(
+                top: 75,
+                right: 10,
+                child: Column(
+                  children: [
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(primary: Colors.indigo),
+                      onPressed: () {},
+                      child: const StrokedTextWidget(
+                          text: 'BUY NOW',
+                          fontSize: 16,
+                          internColor: Colors.white70,
+                          strokeColor: Colors.black),
+                    ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(primary: Colors.indigo),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => NftDescriptionPage(
+                              ownedNftsModel: widget._nftModel,
+                              paletteGenerator: paletteController.palette!,
+                            ),
+                          ),
+                        );
+                      },
+                      child: const StrokedTextWidget(
+                          text: 'More details',
+                          fontSize: 12,
+                          internColor: Colors.white60,
+                          strokeColor: Colors.black),
+                    ),
+                  ],
+                ),
+              )
             ],
-          ),
-        ),
-      ),
-    );
+          );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

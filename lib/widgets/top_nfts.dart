@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:nft_market/controllers/http_owned_nft_controller.dart';
 import 'package:nft_market/controllers/palette_generator_controller.dart';
@@ -26,59 +27,65 @@ class _TopNftsState extends State<TopNfts> {
   @override
   Widget build(BuildContext context) {
     final httpController = context.watch<HttpOwnedNftController>();
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(8, 16, 8, 16),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              StrokedTextWidget(
-                  text: 'Top NFTs',
-                  fontSize: titleText,
-                  internColor: Colors.grey,
-                  strokeColor: Colors.white30),
-              const Spacer(),
-              Container(
-                height: 30,
-                alignment: Alignment.bottomLeft,
-                child: StrokedTextWidget(
-                    text: 'View all',
-                    fontSize: secondaryText,
-                    internColor: Colors.grey,
-                    strokeColor: Colors.white30),
-              ),
-            ],
-          ),
-        ),
-        httpController.state == HttpState.loading
-            ? const SizedBox(
-                width: 50,
-                height: 50,
-                child: CircularProgressIndicator(),
-              )
-            : SizedBox(
-              width: double.infinity,
-              height: 250,
-              child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: httpController.apiNftInitialObject!.length,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    return MultiProvider(
-                      providers: [
-                        ChangeNotifierProvider(
-                            create: (_) => PaletteGeneratorController()),
-                      ],
-                      child: TopNftsItem(
-                        nftModel: httpController.apiNftInitialObject![index],
+    return Expanded(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Padding(
+          //   padding: const EdgeInsets.fromLTRB(8, 16, 8, 16),
+          //   child: Row(
+          //     mainAxisSize: MainAxisSize.min,
+          //     children: [
+          //       StrokedTextWidget(
+          //           text: 'Top NFTs',
+          //           fontSize: titleText,
+          //           internColor: Colors.grey,
+          //           strokeColor: Colors.white30),
+          //       const Spacer(),
+          //     ],
+          //   ),
+          // ),
+          httpController.state == HttpState.loading
+              ? Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: const [
+                      Center(
+                        child: SizedBox(
+                          width: 50,
+                          height: 50,
+                          child: CircularProgressIndicator(),
+                        ),
                       ),
-                    );
-                  },
+                    ],
+                  ),
+                )
+              : Flexible(
+                  child: SizedBox(
+                    width: double.infinity,
+                    height: double.infinity,
+                    child: ListView.builder(
+                      addAutomaticKeepAlives: true,
+                      itemCount: httpController.apiNftInitialObject!.length,
+                      scrollDirection: Axis.vertical,
+                      itemBuilder: (context, index) {
+                        return MultiProvider(
+                          providers: [
+                            ChangeNotifierProvider(
+                                create: (_) => PaletteGeneratorController()),
+                          ],
+                          child: TopNftsItem(
+                            nftModel:
+                                httpController.apiNftInitialObject![index],
+                          ),
+                        );
+                      },
+                    ),
+                  ),
                 ),
-            ),
-      ],
+        ],
+      ),
     );
   }
 }

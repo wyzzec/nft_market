@@ -97,7 +97,7 @@ class _NftDescriptionPageState extends State<NftDescriptionPage> {
                             fontSize: 32.0,
                             fontWeight: FontWeight.bold,
                           ),
-                          speed: const Duration(milliseconds: 30),
+                          speed: const Duration(milliseconds: 20),
                         ),
                       ],
                       totalRepeatCount: 1,

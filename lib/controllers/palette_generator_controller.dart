@@ -13,8 +13,8 @@ class PaletteGeneratorController extends ChangeNotifier {
           CachedNetworkImageProvider(imageUrl),
           maximumColorCount: 20);
       state = PaletteState.loaded;
+      Future.delayed(const Duration(seconds: 5),(){});
       notifyListeners();
-
     } on Exception catch (e) {
       state = PaletteState.error;
       notifyListeners();
