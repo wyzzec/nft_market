@@ -72,7 +72,7 @@ class _TopNftsState extends State<TopNfts> {
                       itemBuilder: (context, index) {
                         return MultiProvider(
                           providers: [
-                            ChangeNotifierProvider(
+                            Provider(
                                 create: (_) => PaletteGeneratorController()),
                           ],
                           child: TopNftsItem(

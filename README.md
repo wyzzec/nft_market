@@ -34,9 +34,13 @@ Aprendizados 1.5
 - A listview agora não perde seu estado quando é feita a navegação para outra tela.
 - Uso do dispose
 
+Aprendizados 1.6
+- BLoC implementado para gerenciar a regra de negócio PaletteGenerator!!
+
 A ser feito:
 - Testes de unidade nas regras de negócio
 - implementação do BLoC
+- publicação na loja
 
 - fotos do app nos assets.
 - link da api: [API request](https://eth-mainnet.alchemyapi.io/v2/demo/getNFTs/?owner=0xfAE46f94Ee7B2Acb497CEcAFf6Cff17F621c693D)
