@@ -8,6 +8,7 @@ import 'package:nft_market/bloc/pallete_generator_bloc/palette_generator_bloc_st
 import 'package:nft_market/bloc/pallete_generator_bloc/palette_generator_bloc_states/palette_generator_bloc_state_interface.dart';
 import 'package:nft_market/bloc/pallete_generator_bloc/palette_generator_bloc_states/palette_generator_bloc_state_loaded.dart';
 import 'package:nft_market/widgets/stroked_text_widget.dart';
+import 'package:nft_market/widgets/top_nft_item_loading.dart';
 import 'package:palette_generator/palette_generator.dart';
 
 import '../api_model/owned_nfts_model.dart';
@@ -51,20 +52,7 @@ class _TopNftsItemState extends State<TopNftsItem>
         builder: (context, snapshot) {
           var state = snapshot.data;
           if (state is PaletteGeneratorBlocStateInitial) {
-            return Column(
-              children: [
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Container(
-                      width: 150,
-                      height: 150,
-                      color: Colors.grey,
-                    ),
-                  ),
-                )
-              ],
-            );
+            return TopNftItemLoading();
           }
           if (state is PaletteGeneratorBlocStateError) {
             return Column(

@@ -37,9 +37,13 @@ Aprendizados 1.5
 Aprendizados 1.6
 - BLoC implementado para gerenciar a regra de negócio PaletteGenerator!!
 
+Aprendizados 1.7
+- Exclusão de todos os controllers
+- BLoC implementado para fazer as requisições http
+- Injeção de dependencia no modulo bloc de requisição http para permitir troca de packages e testes
+
 A ser feito:
-- Testes de unidade nas regras de negócio
-- implementação do BLoC
+- Testes de unidade nas regras de negócio com mock
 - publicação na loja
 
 - fotos do app nos assets.
